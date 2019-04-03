@@ -1,0 +1,11 @@
+ALL: dlg.exe
+
+dlg.obj: dlg.c
+       cl -Alfu -c -G2s -W4 -Zp dlg.c
+
+dlg.res: dlg.rc
+       rc -r dlg.rc
+
+dlg.exe: dlg.obj dlg.def dlg.l dlg.res
+       link @dlg.l;
+       rc dlg.res

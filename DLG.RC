@@ -1,0 +1,143 @@
+#include <os2.h>
+#define ID_DLG   10
+#define ID_FRAME 11
+#define ID_MENU  12
+
+#define ID_FILE                   13
+#define MI_OPEN                   14
+#define MI_CLOSE                  15
+#define MI_EXIT                   16
+
+#define WC_SPINBUTTON  ((PSZ)0xffff0020L)
+/**********************************************************************/
+/* Character Acceptance                                               */
+/**********************************************************************/
+#define SPBS_ALLCHARACTERS 0x00000000L /* Default: All chars accepted */
+#define SPBS_NUMERICONLY   0x00000001L /* Only 0 - 9 accepted & VKeys */
+#define SPBS_READONLY      0x00000002L /* No chars allowed in entryfld*/
+
+/**********************************************************************/
+/* Type of Component                                                  */
+/**********************************************************************/
+#define SPBS_MASTER        0x00000010L
+#define SPBS_SERVANT       0x00000000L /* Default: Servant            */
+
+/**********************************************************************/
+/* Type of Justification                                              */
+/**********************************************************************/
+#define SPBS_JUSTDEFAULT  0x00000000L /* Default: Same as Left        */
+#define SPBS_JUSTLEFT     0x00000008L
+#define SPBS_JUSTRIGHT    0x00000004L
+#define SPBS_JUSTCENTER   0x0000000CL
+
+/**********************************************************************/
+/* Border or not                                                      */
+/**********************************************************************/
+#define SPBS_NOBORDER     0x00000020L /* Borderless SpinField         */
+                                      /* Default is to have a border. */
+
+/**********************************************************************/
+/* Fast spin or not                                                   */
+/**********************************************************************/
+#define SPBS_FASTSPIN     0x00000100L /* Allow fast spinning.  Fast   */
+                                      /* spinning is performed by     */
+                                      /* skipping over numbers        */
+
+/**********************************************************************/
+/* Pad numbers on front with 0's                                      */
+/**********************************************************************/
+#define SPBS_PADWITHZEROS 0x00000080L /* Pad the number with zeroes   */
+
+MENU ID_MENU
+        BEGIN
+          SUBMENU "~File",                ID_FILE
+          BEGIN
+             MENUITEM "~Open...",         MI_OPEN,         MIS_TEXT
+             MENUITEM "~Close...",        MI_CLOSE,        MIS_TEXT
+             MENUITEM SEPARATOR
+             MENUITEM "E~xit \tF3",       MI_EXIT,         MIS_TEXT
+          END
+        END
+
+WINDOWTEMPLATE ID_DLG PRELOAD
+BEGIN
+     WINDOW " - Sample", ID_FRAME, 0,0,0,0,WC_FRAME, NOT WS_VISIBLE,
+        FCF_SYSMENU | FCF_TITLEBAR | FCF_SIZEBORDER |
+        FCF_TASKLIST | FCF_HORZSCROLL | FCF_VERTSCROLL | FCF_MINMAX
+     BEGIN
+       WINDOW "", FID_CLIENT, 1,0,420, 218, "Client Window",
+              WS_VISIBLE | CS_SIZEREDRAW | WS_PARENTCLIP | WS_CLIPCHILDREN
+      BEGIN
+        CONTROL "Name:", 260, 8, 194, 30, 8, WC_STATIC, SS_TEXT | DT_LEFT | 
+                DT_TOP | WS_GROUP | WS_VISIBLE
+        CONTROL "Date:", 284, 177, 194, 24, 8, WC_STATIC, SS_TEXT | DT_LEFT | 
+                DT_TOP | WS_VISIBLE
+        CONTROL "Address:", 264, 9, 174, 41, 8, WC_STATIC, SS_TEXT | DT_LEFT | 
+                DT_TOP |  WS_VISIBLE
+        CONTROL "Phone:", 280, 168, 175, 32, 8, WC_STATIC, SS_TEXT | DT_LEFT | 
+                DT_TOP |  WS_VISIBLE
+        CONTROL "No of Accounts:", 262, 4, 151, 69, 8, WC_STATIC, SS_TEXT | 
+                DT_LEFT | DT_TOP | WS_VISIBLE
+        CONTROL "Multi-Line Entry Text Box", 278, 262, 161, 111, 7, WC_STATIC, 
+                SS_TEXT | DT_LEFT | DT_TOP | WS_VISIBLE
+        CONTROL "Radio Buttons", 266, 11, 88, 98, 50, WC_STATIC, SS_GROUPBOX | 
+                 WS_VISIBLE
+        CONTROL "Reg List Box ", 271, 143, 130, 59, 8, WC_STATIC, SS_TEXT | 
+                DT_LEFT | DT_TOP | WS_VISIBLE
+        CONTROL "Read only Multi-line box ", 287, 257, 107, 107, 8, WC_STATIC, 
+                SS_TEXT | DT_LEFT | DT_TOP |  WS_VISIBLE
+        CONTROL "Drop Down List", 282, 230, 56, 67, 8, WC_STATIC, SS_TEXT | 
+                DT_LEFT | DT_TOP | WS_VISIBLE
+        CONTROL "Spin Button", 283, 144, 57, 53, 8, WC_STATIC, SS_TEXT | 
+                DT_LEFT | DT_TOP | WS_VISIBLE
+
+        CONTROL "Name", 261, 61, 195, 76, 8, WC_ENTRYFIELD, ES_LEFT | ES_AUTOSCROLL | 
+                ES_MARGIN | WS_TABSTOP | WS_VISIBLE | WS_TABSTOP
+        CONTROL "DateEntry", 285, 208, 194, 60, 8, WC_ENTRYFIELD, ES_LEFT | 
+                ES_AUTOSCROLL | ES_MARGIN | WS_TABSTOP | WS_VISIBLE | WS_TABSTOP
+        CONTROL "Check Box 1", 272, 304, 195, 68, 10, WC_BUTTON, BS_CHECKBOX | 
+                WS_TABSTOP | WS_VISIBLE | WS_TABSTOP | WS_GROUP
+        CONTROL "Check Box 2", 273, 305, 179, 70, 10, WC_BUTTON, BS_CHECKBOX | 
+                WS_TABSTOP | WS_VISIBLE | WS_TABSTOP
+        CONTROL "address field", 265, 59, 174, 95, 8, WC_ENTRYFIELD, ES_LEFT | 
+                ES_AUTOSCROLL | ES_MARGIN | WS_TABSTOP | WS_VISIBLE | WS_TABSTOP
+        CONTROL "phone", 279, 208, 175, 75, 8, WC_ENTRYFIELD, ES_LEFT |
+                ES_AUTOSCROLL | ES_MARGIN | WS_TABSTOP | WS_VISIBLE | WS_TABSTOP
+        CONTROL "Num of Accts", 263, 80, 151, 17, 8, WC_ENTRYFIELD, ES_LEFT | 
+                ES_MARGIN | WS_TABSTOP | WS_VISIBLE | WS_TABSTOP
+        CONTROL "Multiline Entry Box", 277, 227, 124, 174, 32, WC_MLE, 
+                MLS_BORDER | MLS_WORDWRAP | MLS_HSCROLL | MLS_VSCROLL | 
+                WS_GROUP | WS_TABSTOP | WS_VISIBLE | WS_TABSTOP
+        CONTROL "Radio 1", 267, 19, 117, 44, 10, WC_BUTTON, BS_RADIOBUTTON | 
+                WS_TABSTOP | WS_VISIBLE | WS_TABSTOP | WS_GROUP
+        CONTROL "Radio 2", 268, 19, 105, 47, 10, WC_BUTTON, BS_RADIOBUTTON | 
+                WS_TABSTOP | WS_VISIBLE | WS_TABSTOP
+        CONTROL "Radio 3", 269, 19, 93, 48, 10, WC_BUTTON, BS_RADIOBUTTON | 
+                WS_TABSTOP | WS_VISIBLE | WS_TABSTOP
+        CONTROL "", 270, 143, 94, 64, 32, WC_LISTBOX, LS_HORZSCROLL | WS_TABSTOP | 
+                WS_VISIBLE | WS_TABSTOP | WS_GROUP
+        CONTROL "Textread only", 286, 231, 72, 164, 32, WC_MLE, MLS_BORDER | MLS_READONLY |
+                MLS_HSCROLL | MLS_VSCROLL | WS_GROUP | WS_TABSTOP | WS_VISIBLE | WS_TABSTOP
+        CONTROL "combo entry list box", 274, 11, 37, 97, 37, WC_COMBOBOX, 
+                CBS_SIMPLE | WS_GROUP | WS_TABSTOP | WS_VISIBLE | WS_TABSTOP
+
+        CONTROL "Spin Button", 500, 144, 40, 53, 14, WC_SPINBUTTON,
+                 SPBS_MASTER | SPBS_ALLCHARACTERS | SPBS_READONLY | WS_VISIBLE | WS_TABSTOP
+
+        CONTROL "Drop Down List", 281, 231, 35, 64, 14, WC_COMBOBOX, CBS_DROPDOWNLIST | 
+                WS_GROUP | WS_TABSTOP | WS_VISIBLE | WS_TABSTOP
+        CONTROL "", 276, 336, 28, 42, 40, WC_SCROLLBAR, SBS_VERT | WS_VISIBLE | WS_TABSTOP
+        CONTROL "Next", 256, 17, 11, 38, 13, WC_BUTTON, BS_PUSHBUTTON | 
+                WS_TABSTOP | WS_VISIBLE | WS_TABSTOP
+        CONTROL "Previous", 257, 80, 11, 48, 13, WC_BUTTON, BS_PUSHBUTTON | 
+                WS_TABSTOP | WS_VISIBLE | WS_TABSTOP
+        CONTROL "Save", 258, 148, 10, 38, 13, WC_BUTTON, BS_PUSHBUTTON | 
+                WS_TABSTOP | WS_VISIBLE | WS_TABSTOP
+        CONTROL "Delete", 259, 207, 10, 38, 13, WC_BUTTON, BS_PUSHBUTTON | 
+                WS_TABSTOP | WS_VISIBLE | WS_TABSTOP
+        CONTROL "", 275, 310, 1, 83, 21, WC_SCROLLBAR, SBS_HORZ | WS_VISIBLE | WS_TABSTOP
+
+     END
+   END
+END
+
