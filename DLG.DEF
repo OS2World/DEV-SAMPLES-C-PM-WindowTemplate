@@ -1,6 +1,4 @@
 NAME      dlg WINDOWAPI
-DESCRIPTION  'dlg - Data Window and Control Uitility'
-STUB         'OS2STUB.EXE'
-STACKSIZE    4096
-HEAPSIZE     4096
-PROTMODE
+DESCRIPTION     '@#OS2World:1.01#@##1## 30 Apr 2023 20:00:00     ARCAOS-507::::::v1.01@@Data Window and Control Uitility'
+        
+STACKSIZE    8192

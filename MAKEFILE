@@ -1,11 +1,20 @@
-ALL: dlg.exe
+# nmake makefile
+#
+# Tools used:
+#  Compile::Resource Compiler
+#  Compile::GNU C
+#  Make: nmake or GNU make
+all: dlg.exe
 
-dlg.obj: dlg.c
-       cl -Alfu -c -G2s -W4 -Zp dlg.c
+dlg.exe : dlg.obj dlg.res dlg.def
+	gcc -Zomf dlg.obj dlg.res dlg.def -o dlg.exe
+	wrc dlg.res
 
-dlg.res: dlg.rc
-       rc -r dlg.rc
+dlg.obj : dlg.c
+	gcc -Wall -Zomf -c -O2 dlg.c -o dlg.obj
 
-dlg.exe: dlg.obj dlg.def dlg.l dlg.res
-       link @dlg.l;
-       rc dlg.res
+dlg.res : dlg.rc
+	wrc -r dlg.rc
+
+clean :
+	rm -rf *exe *RES *obj
